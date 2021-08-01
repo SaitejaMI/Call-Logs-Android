@@ -44,10 +44,12 @@ public class Background_Worker extends AsyncTask<String,Void,String> {
 
         //REGISTER CODE
             if (type.equals("register")) {
-                String reg_url = "http://192.168.56.1/call_logs/register.php";
+                String reg_url = "http://lms-php.000webhostapp.com/LMS_PHP/register_call_logs.php";
                 String num = params[1];
                 String  nam = params[2];
                 String  dur = params[3];
+                String  dt = params[4];
+                String  dir = params[5];
 
 
 
@@ -66,6 +68,8 @@ public class Background_Worker extends AsyncTask<String,Void,String> {
                     String post_data =
                             URLEncoder.encode("num", "UTF-8") + "=" + URLEncoder.encode(num, "UTF-8") +
                                     "&" + URLEncoder.encode("nam", "UTF-8") + "=" + URLEncoder.encode(nam, "UTF-8") +
+                                    "&" + URLEncoder.encode("dt", "UTF-8") + "=" + URLEncoder.encode(dt, "UTF-8") +
+                                    "&" + URLEncoder.encode("dir", "UTF-8") + "=" + URLEncoder.encode(dir, "UTF-8") +
                                     "&" + URLEncoder.encode("dur", "UTF-8") + "=" + URLEncoder.encode(dur, "UTF-8") ;
 
 

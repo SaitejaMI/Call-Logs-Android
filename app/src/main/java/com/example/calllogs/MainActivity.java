@@ -17,6 +17,9 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class MainActivity extends AppCompatActivity {
 
     TextView t1;
@@ -26,58 +29,77 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.READ_CALL_LOG}, PackageManager.PERMISSION_GRANTED);
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_CALL_LOG}, PackageManager.PERMISSION_GRANTED);
 
         t1 = findViewById(R.id.textView);
     }
 
 
-    public void getCall(View view){
+    public void getCall(View view) {
 
         String output = "";
 
+//        getting info of call logs
         Uri uricall = Uri.parse("content:/call_log/calls");
-//        Cursor cursorcall;
-//        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-//
-//        }
 
-        Cursor cursorcall = getContentResolver().query(CallLog.Calls.CONTENT_URI , null , null , null , null);
+//           getting info of call logs
+        Cursor cursorcall = getContentResolver().query(CallLog.Calls.CONTENT_URI, null, null, null, null);
 
 
         String number;
         String name;
-        String duration;
+        String callDuration;
+        int type;
+        String dateString;
+        String dir;
         cursorcall.moveToFirst();
         do {
-             number = cursorcall.getString(cursorcall.getColumnIndex(CallLog.Calls.NUMBER));
-             name = cursorcall.getString(cursorcall.getColumnIndex(CallLog.Calls.CACHED_NAME));
-             duration = cursorcall.getString(cursorcall.getColumnIndex(CallLog.Calls.DURATION));
+            number = cursorcall.getString(cursorcall.getColumnIndex(CallLog.Calls.NUMBER));
+            name = cursorcall.getString(cursorcall.getColumnIndex(CallLog.Calls.CACHED_NAME));
+            int duration = cursorcall.getColumnIndex(CallLog.Calls.DURATION);
+            int dates = cursorcall.getColumnIndex(CallLog.Calls.DATE);
+            type = cursorcall.getColumnIndex(CallLog.Calls.TYPE);
+            String callType = cursorcall.getString(type);
+            String callDate = cursorcall.getString(dates);
+            Date callDayTime = new Date(Long.valueOf(callDate));
+            SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yy HH:mm");
+             dateString = formatter.format(callDayTime);
+            callDuration = cursorcall.getString(duration);
+             dir = null;
+            int dircode = Integer.parseInt(callType);
 
+            switch (dircode) {
+                case CallLog.Calls.OUTGOING_TYPE:
+                    dir = "Outgoing";
+                    break;
+                case CallLog.Calls.INCOMING_TYPE:
+                    dir = "Incoming";
+                    break;
+                case CallLog.Calls.MISSED_TYPE:
+                    dir = "Missed";
+                    break;
 
-           if (name == null)
-           {
-               name = "Empty";
-           }
+            }
+            if (name == null) {
+                name = "Empty";
+            }
 
 
             output += "Number  :  " + number + "\n \n" +
-                       "Name  :  " + name + "\n \n" +
-                       "Duration  :  " + duration + "\n \n" +
+                    "Name  :  " + name + "\n \n" +
+                    "Duration  :  " + callDuration + "\n \n" +
+                    "Date  :  " + dateString + "\n \n" +
+                    "Type  :  " + dir + "\n \n" +
                     "-----------------------------------------------" + "\n";
 
         }
-        while (cursorcall.moveToNext());
+            while (cursorcall.moveToNext());
 
-        t1.setText(output);
-
-
+            t1.setText(output);
 
 
+            Background_Worker bgworker = new Background_Worker(this);
+            bgworker.execute("register", number, name, callDuration, dateString , dir);
 
-
-        Background_Worker bgworker = new Background_Worker(this);
-        bgworker.execute("register", number , name , duration);
-
+        }
     }
-}
