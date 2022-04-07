@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_compare"
+        android:icon="@drawable/compare_arrows_black_24dp"
+        android:title="Compare"
+        tools:ignore="HardcodedText" />
+
+    <item
+        android:id="@+id/nav_recent"
+        android:icon="@drawable/recent"
+        android:title="Recent"
+        tools:ignore="HardcodedText" />
+
+    <item
+        android:id="@+id/nav_contacts"
+        android:icon="@drawable/account_circle_black_24dp"
+        android:title="Contacts"
+        tools:ignore="HardcodedText" />
+
+    <item
+        android:id="@+id/nav_dashboard"
+        android:icon="@drawable/analytics_black_48dp"
+        android:title="Dashboard"
+        tools:ignore="HardcodedText" />
+
+    <item
+        android:id="@+id/nav_notification"
+        android:icon="@drawable/notifications_black_24dp"
+        android:title="Notification"
+        tools:ignore="HardcodedText" />
+
+</menu>
